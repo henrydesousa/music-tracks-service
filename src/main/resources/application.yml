@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/music-tracks"
+    username: postgres
+    password: <password>
+spotify:
+  accounts-host: https://accounts.spotify.com/
+  api-host: https://api.spotify.com/
+  clientId-clientSecret-base64: <base64 string>
