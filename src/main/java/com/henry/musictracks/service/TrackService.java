@@ -21,24 +21,23 @@ public class TrackService {
     private final SpotifyClient spotifyClient;
 
     public Optional<Track> createTrack(String ISRC) {
-        TrackObject trackObject = null;
         try {
-            trackObject = spotifyClient.fetchTrackMetadata(ISRC);
+            TrackObject trackObject = spotifyClient.fetchTrackMetadata(ISRC);
+            if (trackObject != null && trackObject.getTracks() != null && trackObject.getTracks().getItems().size() > 0) {
+                log.info(String.format("Creating new Track with ISRC: %s", ISRC));
+                Item item = trackObject.getTracks().getItems().get(0);
+                Track track = Track.builder()
+                        .ISRC(ISRC)
+                        .durationTimeMillis(item.getDurationTimeMillis())
+                        .explicit(item.isExplicit())
+                        .name(item.getName())
+                        .build();
+                return Optional.of(trackRepository.save(track));
+            }
         } catch (IOException e) {
-            log.error("An error has occurred", e);
+            log.error(String.format("An error has occurred creating Track with ISRC: %s", ISRC), e);
         }
 
-        if (trackObject != null && trackObject.getTracks() != null && trackObject.getTracks().getItems().size() > 0) {
-            log.info(String.format("Creating new Track with ISRC: %s", ISRC));
-            Item item = trackObject.getTracks().getItems().get(0);
-            Track track = Track.builder()
-                    .ISRC(ISRC)
-                    .durationTimeMillis(item.getDurationTimeMillis())
-                    .explicit(item.isExplicit())
-                    .name(item.getName())
-                    .build();
-            return Optional.of(trackRepository.save(track));
-        }
         return Optional.empty();
     }
 
