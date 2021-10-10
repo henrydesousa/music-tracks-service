@@ -1,7 +1,7 @@
 package com.henry.musictracks.spotify.api;
 
 import com.henry.musictracks.spotify.model.Token;
-import com.henry.musictracks.spotify.model.TrackObject;
+import com.henry.musictracks.spotify.model.TrackMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,10 +31,10 @@ class SpotifyRetrofitClient implements SpotifyClient {
     }
 
     @Override
-    public Optional<TrackObject> fetchTrackMetadata(String ISRC) throws IOException {
+    public Optional<TrackMetadata> fetchTrackMetadata(String ISRC) throws IOException {
         Token token = getToken();
         String accessToken = "Bearer " + token.getAccessToken();
-        Response<TrackObject> trackResponse = spotifyAPI.fetchTrackMetadata(
+        Response<TrackMetadata> trackResponse = spotifyAPI.fetchTrackMetadata(
                 accessToken,
                 QUERY + ISRC,
                 TRACK).execute();

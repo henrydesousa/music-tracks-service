@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TrackObject {
+public class TrackMetadata {
 
     @JsonProperty(value="tracks")
     Track track;
