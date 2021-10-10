@@ -1,7 +1,6 @@
 package com.henry.musictracks.spotify.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Item {
+public class ExternalId {
 
-    @JsonProperty(value="duration_ms")
-    private long durationTimeMillis;
-    private boolean explicit;
-    private String name;
-    @JsonProperty(value="external_ids")
-    private ExternalId externalId;
+    private String isrc;
 
 }

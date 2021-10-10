@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -30,13 +31,13 @@ class SpotifyRetrofitClient implements SpotifyClient {
     }
 
     @Override
-    public TrackObject fetchTrackMetadata(String ISRC) throws IOException {
+    public Optional<TrackObject> fetchTrackMetadata(String ISRC) throws IOException {
         Token token = getToken();
         String accessToken = "Bearer " + token.getAccessToken();
         Response<TrackObject> trackResponse = spotifyAPI.fetchTrackMetadata(
                 accessToken,
                 QUERY + ISRC,
                 TRACK).execute();
-        return trackResponse.body();
+        return Optional.of(trackResponse.body());
     }
 }
