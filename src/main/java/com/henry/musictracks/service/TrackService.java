@@ -21,12 +21,18 @@ public class TrackService {
     private final SpotifyClient spotifyClient;
 
     public void createTrack(String ISRC) {
-        try {
-            Optional<TrackObject> trackObject = spotifyClient.fetchTrackMetadata(ISRC);
-            trackObject.ifPresent(this::persistTrack);
-        } catch (IOException e) {
-            log.error(String.format("An error has occurred creating Track with ISRC: %s", ISRC), e);
-        }
+        Optional<Track> trackInDB = trackRepository.findByISRC(ISRC);
+        trackInDB.ifPresentOrElse(t -> {
+                    log.info(String.format("Track with ISRC: %s already exists", ISRC));
+                },
+                () -> {
+                    try {
+                        Optional<TrackObject> trackObject = spotifyClient.fetchTrackMetadata(ISRC);
+                        trackObject.ifPresent(this::persistTrack);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     private void persistTrack(TrackObject trackObject) {
