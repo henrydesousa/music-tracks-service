@@ -19,7 +19,7 @@ pipeline {
                     ]) {
                         sh 'docker build -t henrydesousa/music-tracks-service:2.0 .'
                         sh "echo $PASSWORD | docker login -u $USER --password-stdin"
-                        sh 'docker push henrydesousa/music-tracks-service:1.0'
+                        sh 'docker push henrydesousa/music-tracks-service:2.0'
                     }
                 }
             }
