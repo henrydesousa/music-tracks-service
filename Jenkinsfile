@@ -1,24 +1,29 @@
 pipeline {
     agent any
-
     stages {
-        stage("build") {
-
+        stage("build jar") {
             steps {
-                echo 'building the application'
+                script {
+                    echo 'building the application'
+                    sh './gradlew build -x test'
+                }
             }
         }
-        stage("test") {
 
+        stage("build image") {
             steps {
-                echo 'testing the application'
+                script {
+                    echo 'building the docker image'
+                    withCredentials([
+                        usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USER', passwordVariable: 'PASSWORD')
+                    ]) {
+                        sh 'docker build -t henrydesousa/testing/music-tracks-service:1.0 .'
+                        sh "echo $PASSWORD | docker login -u $USER --password-stdin"
+                        sh 'docker push henrydesousa/testing/music-tracks-service:1.0'
+                    }
+                }
             }
         }
-        stage("deploy") {
 
-            steps {
-                echo 'deploying the application'
-            }
-        }
     }
 }
