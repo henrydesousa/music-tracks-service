@@ -17,7 +17,7 @@ pipeline {
                     withCredentials([
                         usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USER', passwordVariable: 'PASSWORD')
                     ]) {
-                        sh 'docker build -t henrydesousa/testing/music-tracks-service:1.0 .'
+                        sh 'docker build -t henrydesousa/music-tracks-service:1.0 .'
                         sh "echo $PASSWORD | docker login -u $USER --password-stdin"
                         sh 'docker push henrydesousa/testing/music-tracks-service:1.0'
                     }
