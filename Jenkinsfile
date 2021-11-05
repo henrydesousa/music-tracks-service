@@ -1,12 +1,24 @@
 pipeline {
     agent any
     stages {
-        stage("build jar") {
+        stage("build") {
             steps {
-                script {
-                    echo 'building the application'
-                    sh './gradlew build -x test'
-                }
+               sh './gradlew -q properties > gprops'
+               script {
+                 buildVersion = sh(returnStdout: true, script: 'cat gprops |grep version:|awk \'{print $2}\'').trim()
+                 buildName = sh(returnStdout: true, script: 'cat gprops |grep name:|awk \'{print $2}\'').trim()
+                 buildDir = sh(returnStdout: true, script: 'cat gprops |grep buildDir:|awk \'{print $2}\'').trim()
+                 jarFile = "./build/libs/music-tracks-service-${buildVersion}.jar"
+                 tagTime = sh(returnStdout: true, script: 'echo $(date +%Y%m%d)').trim()
+                 imageTag = "${tagTime}.${BUILD_NUMBER}"
+               }
+               echo "buildVersion: ${buildVersion}"
+               echo "buildName: ${buildName}"
+               echo "buildDir: ${buildDir}"
+               echo "jarFile: ${jarFile}"
+               echo "tagTime: ${tagTime}"
+               echo "imageTag: ${imageTag}"
+               sh './gradlew clean build -x test'
             }
         }
 
