@@ -7,10 +7,10 @@ pipeline {
                script {
                    echo 'building the application...'
                  APP_VERSION = sh(returnStdout: true, script: 'cat gprops |grep version:|awk \'{print $2}\'').trim()
-                 APP_NAME = sh(returnStdout: true, script: 'cat gprops |grep name:|awk \'{print $2}\'').trim()
+                 env.APP_NAME = sh(returnStdout: true, script: 'cat gprops |grep name:|awk \'{print $2}\'').trim()
                  JAR_FILE = "./build/libs/${APP_NAME}-${APP_VERSION}.jar"
                  TAG_TIME = sh(returnStdout: true, script: 'echo $(date +%Y%m%d)').trim()
-                 IMAGE_TAG = "${TAG_TIME}.${BUILD_NUMBER}"
+                 env.IMAGE_TAG = "${TAG_TIME}.${BUILD_NUMBER}"
                }
                sh './gradlew clean build -x test'
             }
